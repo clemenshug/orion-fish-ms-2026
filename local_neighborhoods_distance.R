@@ -129,11 +129,16 @@ write_excel_csv(data_with_neighborhoods_3,"data_with_neighborhoods_LSP18304.csv"
 # filter them out
 
 
-data_with_neighborhoods <- data_with_neighborhoods %>%
+data_with_neighborhoods <- bind_rows(
+  data_with_neighborhoods_1,
+  data_with_neighborhoods_2,
+  data_with_neighborhoods_3
+) %>%
   filter(total_neighbors > 0) %>%
   drop_na()
 
 write_csv(data_with_neighborhoods, "data_with_neighborhoods_allSTIC_v2.csv")
+write_excel_csv(data_with_neighborhoods,"data_with_neighborhoods_all_STICs.csv")
 
 
 ################################
@@ -146,17 +151,10 @@ sum(is.na(data_with_neighborhoods$ratio_MYC_FISH))
 # Only for single slide
 
 read_csv("data_with_neighborhoods_LSP18304.csv")
-LSP18304 <- data_with_neighborhoods_LSP18304
-LSP19422 <- data_with_neighborhoods_LSP19422
-LSP18316 <- data_with_neighborhoods_LSP18316
+LSP18304 <- data_with_neighborhoods_3
+LSP19422 <- data_with_neighborhoods_2
+LSP18316 <- data_with_neighborhoods_1
 
-data_with_neighborhoods <- bind_rows(
-  data_with_neighborhoods_1,
-  data_with_neighborhoods_2,
-  data_with_neighborhoods_3
-)
-
-write_excel_csv(data_with_neighborhoods,"data_with_neighborhoods_all_STICs.csv")
 
 
 # marker/neighborhood combinations to test
@@ -208,4 +206,5 @@ glm_res_df_3 <- glm_res %>%
   )
 
 write_csv(glm_res_df_3, "glm_allslides_onlyFTs_summary.csv")
+
 
